@@ -2,14 +2,12 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from factguesser.models import Proposition
 
-class SnippetSerializer(serializers.HyperlinkedModelSerializer):
+class PropositionSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    highlight = serializers.HyperlinkedIdentityField(view_name='proposition-highlight', format='html')
-
+    
     class Meta:
         model = Proposition
-        fields = ('url', 'id', 'highlight', 'owner',
-                  'title', 'tosi')
+        fields = ('url', 'id', 'owner', 'title', 'tosi')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.HyperlinkedRelatedField(many=True, view_name='proposition-detail', read_only=True)

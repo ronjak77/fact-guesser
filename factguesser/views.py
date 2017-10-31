@@ -6,14 +6,15 @@ from serializers import UserSerializer
 
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from factguesser.models import Proposition
-from factguesser.serializers import SnippetSerializer
+from factguesser.serializers import PropositionSerializer
 from django.http import Http404
 from rest_framework.routers import DefaultRouter
 
@@ -29,25 +30,21 @@ class PropositionViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
-
-    Additionally we also provide an extra `highlight` action.
     """
     queryset = Proposition.objects.all()
-    serializer_class = SnippetSerializer
+    serializer_class = PropositionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
-
+                          
     @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
-    def highlight(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(snippet.highlighted)
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-        
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'propositions': reverse('proposition-list', request=request, format=format)
-    })
+
+@api_view()
+def PropositionCountView(request):
+    """
+    A view that returns the count of propositions.
+    """
+    proposition_count = Proposition.objects.count()
+    content = {'proposition_count': proposition_count}
+    return Response(content)
