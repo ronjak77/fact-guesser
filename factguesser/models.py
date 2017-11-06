@@ -16,3 +16,7 @@ class Proposition(models.Model):
         options = self.title and {'title': self.title} or {}
         super(Proposition, self).save(*args, **kwargs)
         
+class Answer(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    answer = models.BooleanField(default=True)
+    proposition = models.ForeignKey(Proposition, related_name='answers', on_delete=models.CASCADE)
