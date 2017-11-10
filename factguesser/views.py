@@ -14,11 +14,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from factguesser.models import Proposition
-from factguesser.serializers import PropositionSerializer
+from factguesser.models import Proposition, Answer
+from factguesser.serializers import PropositionSerializer, AnswerSerializer
 from django.http import Http404
 from rest_framework.routers import DefaultRouter
 
+class AnswerViewSet(viewsets.ModelViewSet):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -36,6 +39,9 @@ class PropositionViewSet(viewsets.ModelViewSet):
     serializer_class = PropositionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
+                          
+    def pre_save(self, obj):
+        obj.user = self.request.user
                           
     @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
     def perform_create(self, serializer):

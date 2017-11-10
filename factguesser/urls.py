@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from factguesser import views
 from rest_framework.routers import DefaultRouter
-from factguesser.views import PropositionViewSet, PropositionCountView, UserViewSet
+from factguesser.views import PropositionViewSet, PropositionCountView, UserViewSet, AnswerViewSet
 from rest_framework import renderers
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -9,6 +9,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 router = DefaultRouter()
 router.register(r'propositions', views.PropositionViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'answers', views.AnswerViewSet)
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
