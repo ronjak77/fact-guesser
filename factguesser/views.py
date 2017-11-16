@@ -20,6 +20,9 @@ from django.http import Http404
 from rest_framework.routers import DefaultRouter
 
 class AnswerViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows answers to be viewed.
+    """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 

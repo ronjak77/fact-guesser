@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 class Proposition(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
-    tosi = models.BooleanField(default=True)
+    title = models.CharField(max_length=200, blank=True, default='')
+    truthvalue = models.BooleanField(default=True)
     owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
 
     class Meta:
