@@ -18,9 +18,9 @@ class PropositionSerializer(serializers.HyperlinkedModelSerializer):
         depth = 2
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    snippets = serializers.HyperlinkedRelatedField(many=True, view_name='proposition-detail', read_only=True)
+    propositions = serializers.HyperlinkedRelatedField(many=True, view_name='proposition-detail', read_only=True)
     
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'snippets')
+        fields = ('url', 'id', 'username', 'propositions')

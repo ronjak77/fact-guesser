@@ -7,7 +7,7 @@ class Proposition(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=200, blank=True, default='')
     truthvalue = models.BooleanField(default=True)
-    owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='propositions', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('created',)
