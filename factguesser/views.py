@@ -49,13 +49,3 @@ class PropositionViewSet(viewsets.ModelViewSet):
     @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-@api_view()
-@permission_classes((IsAuthenticatedOrReadOnly, ))
-def PropositionCountView(request):
-    """
-    A view that returns the count of propositions.
-    """
-    proposition_count = Proposition.objects.count()
-    content = {'proposition_count': proposition_count}
-    return Response(content)
