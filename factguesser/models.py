@@ -20,3 +20,6 @@ class Answer(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     answer = models.BooleanField(default=True)
     proposition = models.ForeignKey(Proposition, related_name='answers', on_delete=models.CASCADE)
+    
+    def __unicode__(self):
+        return str(self.answer)

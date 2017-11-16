@@ -5,12 +5,12 @@ from factguesser.models import Proposition, Answer
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Answer
-        fields = ('answer', 'proposition', 'created')
-        read_only_fields = ('answer', 'created')
+        fields = ('url', 'id', 'answer', 'proposition', 'created')
+        read_only_fields = ('created',)
 
 class PropositionSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    answers = serializers.HyperlinkedRelatedField(many=True, view_name='answer-detail', read_only=True)
+    answers = serializers.StringRelatedField(many=True, read_only=True)
     
     class Meta:
         model = Proposition
@@ -19,7 +19,6 @@ class PropositionSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     propositions = serializers.HyperlinkedRelatedField(many=True, view_name='proposition-detail', read_only=True)
-    
 
     class Meta:
         model = User
