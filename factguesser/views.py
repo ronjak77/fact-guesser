@@ -27,6 +27,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
     serializer_class = AnswerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+    def pre_save(self, obj):
+        obj.owner = self.request.user
+    
     def perform_create(self, serializer):
         if self.request.user.id == None:
             try:
