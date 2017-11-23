@@ -21,10 +21,16 @@ from rest_framework.routers import DefaultRouter
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows answers to be viewed.
+    API endpoint that allows answers to be viewed and created.
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    
+    def perform_create(self, serializer):
+        owner=self.request.user
+        serializer.save()
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
