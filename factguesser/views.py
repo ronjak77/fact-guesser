@@ -26,11 +26,19 @@ class AnswerViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-    
-    def perform_create(self, serializer):
-        owner=self.request.user
-        serializer.save()
 
+    def perform_create(self, serializer):
+        if self.request.user.id == None:
+            try:
+                owner = User.objects.get(username="anon")
+            except:
+                owner = User.objects.create(username="anon")
+        else:
+            owner = self.request.user
+            owner.id = self.request.user.id
+        print owner
+        print owner.id
+        serializer.save()
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -39,7 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (IsSameUserOrReadOnly,)
-    
+
 class PropositionViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -49,10 +57,10 @@ class PropositionViewSet(viewsets.ModelViewSet):
     serializer_class = PropositionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
-                          
+
     def pre_save(self, obj):
         obj.user = self.request.user
-                          
+
     @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

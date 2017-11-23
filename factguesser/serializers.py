@@ -4,16 +4,16 @@ from factguesser.models import Proposition, Answer
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    
+
     class Meta:
         model = Answer
-        fields = ('url', 'id', 'answer','owner', 'proposition', 'created',)
+        fields = ('url', 'id', 'answer', 'owner', 'proposition', 'created',)
         read_only_fields = ('created',)
 
 class PropositionSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     answers = serializers.StringRelatedField(many=True, read_only=True)
-    
+
     class Meta:
         model = Proposition
         fields = ('url', 'id', 'owner', 'title', 'truthvalue', 'answers')
