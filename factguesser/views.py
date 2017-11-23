@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from factguesser.permissions import IsOwnerOrReadOnly
+from factguesser.permissions import IsOwnerOrReadOnly, IsSameUserOrReadOnly
 from django.contrib.auth.models import User, Group
 from serializers import UserSerializer
 
@@ -32,6 +32,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    permission_classes = (IsSameUserOrReadOnly,)
     
 class PropositionViewSet(viewsets.ModelViewSet):
     """
