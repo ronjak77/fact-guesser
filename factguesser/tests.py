@@ -50,6 +50,8 @@ class APITestCase(APITestCase):
         self.client = APIClient()
         self.user = User.objects.create(username="testApiUser")
         self.client.force_authenticate(user=self.user)
+        
+        # Create initial Proposition object
         Proposition.objects.create(title='Cats bark', owner=self.user, truthvalue=False)
         
     def test_list_propositions(self):
@@ -58,6 +60,8 @@ class APITestCase(APITestCase):
         """
         url = reverse('proposition-list')
         response = self.client.get(url)
+        assert response.data['count'] == 1
+        assert response.status_code == 200
     
     def test_proposition(self):
         """
@@ -71,14 +75,14 @@ class APITestCase(APITestCase):
         Add a proposition
         """
         response = self.client.post('/propositions/', {'title': 'Moon is square'}, format='json')
-        self.assertEqual(response.data, {'id': 2, 'owner': 'testApiUser', 'title': 'Moon is square', 'url':'http://testserver/propositions/2/', 'truthvalue': True, 'answers':[]})
+        assert response.data['title'] == 'Moon is square'
+        assert response.data['truthvalue'] == True
+        self.assertEqual(Proposition.objects.count(), 2)
     
     def test_add_answer(self):
         """
         Add an answer
         """
-        old_count = Answer.objects.count()
         response = self.client.post('/answers/', {'answer': False, 'proposition': 'http://testserver/propositions/2/'}, format='json')
         print response.data
-        new_count = Answer.objects.count()
-        self.assertNotEqual(old_count, new_count)
+        self.assertEqual(Answer.objects.count(), 1)
