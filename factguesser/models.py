@@ -20,7 +20,6 @@ class Answer(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     answer = models.BooleanField(default=True)
     proposition = models.ForeignKey(Proposition, related_name='answers', on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, blank = True, null = True)
 
     """
     Return string representation for displaying as a part of a Proposition object

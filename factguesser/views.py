@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from factguesser.permissions import IsOwnerOrReadOnly, IsSameUserOrReadOnly
+from factguesser.permissions import IsOwnerOrReadOnly, IsSameUserOrReadOnly, AllowAddAndRead
 from django.contrib.auth.models import User, Group
 from serializers import UserSerializer
 
@@ -25,20 +25,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
-   # def pre_save(self, obj):
-    #    obj.owner = self.request.user
-    
-    def perform_create(self, serializer):
-        if self.request.user.id == None:
-            try:
-                owner = User.objects.get(username="anon")
-            except:
-                owner = User.objects.create(username="anon")
-        else:
-            owner = self.request.user
-        serializer.save()
+    permission_classes = (AllowAddAndRead, )
 
 class UserViewSet(viewsets.ModelViewSet):
     """

@@ -28,3 +28,14 @@ class IsSameUserOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the user themselves.
         return obj == request.user
+        
+class AllowAddAndRead(permissions.BasePermission):
+    """
+    Allow creating new objects and read access.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            request.method in permissions.SAFE_METHODS or
+            request.method == "POST"
+        )
