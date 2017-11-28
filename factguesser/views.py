@@ -10,10 +10,12 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework import permissions
+from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import renderers
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework import status
 from factguesser.models import Proposition, Answer
 from factguesser.serializers import PropositionSerializer, AnswerSerializer
 from django.http import Http404
@@ -45,9 +47,9 @@ class PropositionViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
-    def pre_save(self, obj):
-        obj.user = self.request.user
-
     @detail_route(renderer_classes=[renderers.StaticHTMLRenderer])
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        if self.request.user.is_authenticated():
+            serializer.save(owner=self.request.user)
+        else:
+            raise exceptions.PermissionDenied(detail=None, code=None)

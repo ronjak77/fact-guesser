@@ -77,12 +77,56 @@ class APITestCase(APITestCase):
         response = self.client.post('/propositions/', {'title': 'Moon is square'}, format='json')
         assert response.data['title'] == 'Moon is square'
         assert response.data['truthvalue'] == True
+        # Assert 201 Created as status
+        assert response.status_code == 201
         self.assertEqual(Proposition.objects.count(), 2)
     
     def test_add_answer(self):
         """
         Add an answer
         """
-        response = self.client.post('/answers/', {'answer': False, 'proposition': 'http://testserver/propositions/2/'}, format='json')
-        print response.data
+        response = self.client.post('/answers/', {'answer': False, 'proposition': 'http://testserver/propositions/1/'}, format='json')
+        # Assert 201 Created as status
+        assert response.status_code == 201
         self.assertEqual(Answer.objects.count(), 1)
+    
+    def test_add_proposition_unauthenticated(self):
+        """
+        Try to add a Proposition as an unauthenticated user.
+        We expect unauthenticated users not to be able to add Propositions.
+        """
+        self.client.force_authenticate(user=None, token=None)
+        response = self.client.post('/propositions/', {'title': 'Unauthenticated users can add Propositions'}, format='json')
+        # Assert 403 Permission Denied as status
+        assert response.status_code == 403
+        # Assert only the initial Proposition exists
+        self.assertEqual(Proposition.objects.count(), 1)
+    
+    def test_add_user_unauthenticated(self):
+        """
+        Unauthenticated user can add new Users.
+        """
+        self.client.force_authenticate(user=None, token=None)
+        response = self.client.post('/users/', {'username': 'Tahvo', 'password': 'test'}, format='json')
+        assert response.data['username'] == 'Tahvo'
+        # User password absolutely shouldn't be sent back.
+        self.assertFalse('password' in response.data)
+        # Assert 201 Created as status
+        assert response.status_code == 201
+        # We should now have the initial User plus this one
+        self.assertEqual(User.objects.count(), 2)
+        
+    def test_add_user_authenticated(self):
+        """
+        Authenticated user can add new Users.
+        """
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post('/users/', {'username': 'Kaaleppi', 'password': 'test'}, format='json')
+        assert response.data['username'] == 'Kaaleppi'
+        # User password absolutely shouldn't be sent back.
+        self.assertFalse('password' in response.data)
+        # Assert 201 Created as status
+        assert response.status_code == 201
+        # We should now have the initial User plus this one
+        self.assertEqual(User.objects.count(), 2)
+        
