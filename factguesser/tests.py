@@ -129,4 +129,19 @@ class APITestCase(APITestCase):
         assert response.status_code == 201
         # We should now have the initial User plus this one
         self.assertEqual(User.objects.count(), 2)
-        
+    
+    def test_everyone_can_access_schema(self):
+        """
+        The schema is not publicly available.
+        """
+        self.client.force_authenticate(user=None, token=None)
+        response = self.client.get('/schema/')
+        assert response.status_code == 403
+    
+    def test_everyone_can_access_api_root(self):
+        """
+        Accessing API root will return a list of endpoints.
+        """
+        self.client.force_authenticate(user=None, token=None)
+        response = self.client.get('/')
+        assert 'propositions' in response.data

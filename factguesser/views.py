@@ -21,6 +21,20 @@ from factguesser.serializers import PropositionSerializer, AnswerSerializer
 from django.http import Http404
 from rest_framework.routers import DefaultRouter
 
+# Explicitly define the api root view, in order to include the schema in the listing.
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny, ))
+def api_root(request, format=None):
+    """
+    An API for creating Propositions and Answers related to them.
+    """
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'propositions': reverse('proposition-list', request=request, format=format),
+        'answers': reverse('answer-list', request=request, format=format),
+        'schema': reverse('schema', request=request, format=format)
+    })
+
 class AnswerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows answers to be viewed and created.
