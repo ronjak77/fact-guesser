@@ -17,7 +17,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 class IsSameUserOrReadOnly(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to only allow the user to edit only their own info.
     """
 
     def has_object_permission(self, request, view, obj):

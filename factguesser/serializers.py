@@ -3,6 +3,9 @@ from rest_framework import serializers
 from factguesser.models import Proposition, Answer
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Defines a serializer for the Answer model
+    """
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
@@ -11,7 +14,11 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ('created',)
 
 class PropositionSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Defines a serializer for the Proposition model
+    """
     owner = serializers.ReadOnlyField(source='owner.username')
+    # Each Proposition may have related Answers
     answers = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -20,9 +27,14 @@ class PropositionSerializer(serializers.HyperlinkedModelSerializer):
         depth = 2
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Defines a serializer for the User model
+    """
     propositions = serializers.HyperlinkedRelatedField(many=True, view_name='proposition-detail', read_only=True)
+    # Password input type for Browsable API. User shouldn't be able to retrieve the password, so write_only.
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
-
+    
+    # When user is created, the password is set with set_password
     def create(self, validated_data):
         user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data['password'])

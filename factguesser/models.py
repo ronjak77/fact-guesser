@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 
 class Proposition(models.Model):
+    """
+    Define fields and default values for Proposition model
+    """
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=200, blank=True, default='')
     truthvalue = models.BooleanField(default=True)
@@ -12,11 +15,17 @@ class Proposition(models.Model):
     class Meta:
         ordering = ('created',)
 
+    """
+    On save, set title
+    """
     def save(self, *args, **kwargs):
         options = self.title and {'title': self.title} or {}
         super(Proposition, self).save(*args, **kwargs)
 
 class Answer(models.Model):
+    """
+    Define fields and default values for Answer model
+    """
     created = models.DateTimeField(auto_now_add=True)
     answer = models.BooleanField(default=True)
     proposition = models.ForeignKey(Proposition, related_name='answers', on_delete=models.CASCADE)
