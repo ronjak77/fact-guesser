@@ -132,11 +132,11 @@ class APITestCase(APITestCase):
     
     def test_everyone_can_access_schema(self):
         """
-        The schema is not publicly available.
+        The schema is publicly available.
         """
         self.client.force_authenticate(user=None, token=None)
         response = self.client.get('/schema/')
-        assert response.status_code == 403
+        assert response.status_code == 200
     
     def test_everyone_can_access_api_root(self):
         """
