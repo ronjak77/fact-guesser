@@ -31,8 +31,10 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'propositions': reverse('proposition-list', request=request, format=format),
         'answers': reverse('answer-list', request=request, format=format),
-        'schema': reverse('schema', request=request, format=format)
+        'schema': reverse('schema', request=request, format=format),
+        'docs': reverse('api-docs:docs-index', request=request, format=format),
     })
+    
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
