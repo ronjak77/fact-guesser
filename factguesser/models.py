@@ -21,6 +21,18 @@ class Proposition(models.Model):
     def save(self, *args, **kwargs):
         options = self.title and {'title': self.title} or {}
         super(Proposition, self).save(*args, **kwargs)
+        
+    """
+    Return unicode representation for displaying as a part of a Proposition object
+    """
+    def __unicode__(self):
+        return str(self.title)
+    
+    """
+    Return string representation for displaying as a part of a Proposition object
+    """
+    def __str__(self):
+        return str(self.title)
 
 class Answer(models.Model):
     """
@@ -31,7 +43,13 @@ class Answer(models.Model):
     proposition = models.ForeignKey(Proposition, related_name='answers', on_delete=models.CASCADE)
 
     """
-    Return string representation for displaying as a part of a Proposition object
+    Return unicode representation for displaying as a part of a Proposition object
     """
     def __unicode__(self):
+        return str(self.answer)
+    
+    """
+    Return string representation for displaying as a part of a Proposition object
+    """
+    def __str__(self):
         return str(self.answer)

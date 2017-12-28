@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from django.contrib import admin
 from rest_framework import renderers
 from rest_framework import routers
 from rest_framework import permissions
@@ -26,6 +27,7 @@ schema_view = get_schema_view(title='Fact listing API', permission_classes=(perm
 urlpatterns = [
     url(r'^$', api_root),
     url(r'^', include(router.urls)),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^schema/$', schema_view, name='schema'),
     url(r'^docs/', include_docs_urls(title='Fact listing API', public=False)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

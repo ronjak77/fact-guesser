@@ -7,11 +7,12 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     Defines a serializer for the Answer model
     """
     owner = serializers.ReadOnlyField(source='owner.username')
+    propositiontext = serializers.ReadOnlyField(source='proposition.title')
 
     class Meta:
         model = Answer
-        fields = ('url', 'id', 'answer', 'owner', 'proposition', 'created',)
-        read_only_fields = ('created',)
+        fields = ('url', 'id', 'answer', 'owner', 'proposition', 'propositiontext', 'created',)
+        read_only_fields = ('created', 'propositiontext')
 
 class PropositionSerializer(serializers.HyperlinkedModelSerializer):
     """
