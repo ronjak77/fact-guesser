@@ -29,6 +29,6 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^schema/$', schema_view, name='schema'),
-    url(r'^docs/', include_docs_urls(title='Fact listing API', public=False)),
+    url(r'^docs/', include_docs_urls(title='Fact listing API', public=False, permission_classes=(permissions.AllowAny,))),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

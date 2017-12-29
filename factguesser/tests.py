@@ -137,6 +137,14 @@ class APITestCase(APITestCase):
         self.client.force_authenticate(user=None, token=None)
         response = self.client.get('/schema/')
         assert response.status_code == 200
+        
+    def test_everyone_can_access_docs(self):
+        """
+        Test that the documentation is publicly available.
+        """
+        self.client.force_authenticate(user=None, token=None)
+        response = self.client.get('/docs/')
+        assert response.status_code == 200
     
     def test_everyone_can_access_api_root(self):
         """
