@@ -1,42 +1,76 @@
+# Fact Guesser App
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+This is an API for a fact listing application. The users of the application can give Yes/No answers to propositions that have been entered into the system by authenticated users. 
+The purpose of the project is to learn more about Django Rest Framework and web development in general.
 
+# Instructions for installation
 
-Welcome to your Django project on Cloud9 IDE!
+The project uses Python 2.7.6, Django 1.9 and Django Rest Framework 3.7.1. 
+To install Django and other python packages, you need pip (https://pip.pypa.io/en/stable/installing/). 
+You also need virtualenv (installation instructions here https://virtualenv.pypa.io/en/stable/installation/).
+To clone the codebase, you need git (https://git-scm.com/downloads).
 
-Your Django project is already fully setup. Just click the "Run" button to start
-the application. On first run you will be asked to create an admin user. You can
-access your application from 'https://fact-guesser-ronjak77.c9users.io/' and the admin page from 
-'https://fact-guesser-ronjak77.c9users.io/admin'.
+### Create a virtualenv to isolate our package dependencies locally
+virtualenv env
+source env/bin/activate  # On Windows use `env\Scripts\activate` with no 'source'
 
-## Starting from the Terminal
+### Install Django and Django REST framework into the virtualenv
+To run this program, you need version 1.9 of Django at the moment. You also need Django Rest Framework.
 
-In case you want to run your Django application from the terminal just run:
+    pip install django==1.9
+    pip install djangorestframework
 
-1) Run syncdb command to sync models to database and create Django's default superuser and auth system
+The documentation has also some additional dependencies, install these like this:
 
-    $ python manage.py migrate
+    pip install coreapi
+    pip install pygments
+    pip install markdown
 
-2) Run Django
+## Cloning the project
 
-    $ python manage.py runserver $IP:$PORT
+Clone the repository:
+
+    git clone https://github.com/ronjak77/fact-guesser.git
+
+## Setting environment variable 'SECRET_KEY'
+
+Depending on your operating system, this is done differently. For example, for Windows you can do it using Powershell with this command:
+
+    $env:SECRET_KEY = "key here"
     
-## Configuration
+and for Ubuntu using bash
 
-You can configure your Python version and `PYTHONPATH` used in
-Cloud9 > Preferences > Project Settings > Language Support.
+    export SECRET_KEY="key here"
+    
+For some environments, such as Heroku or c9.io, you might need to consult their documentation to figure out how to set this.
 
-## Support & Documentation
+## Starting the server from the Terminal
+
+To start the server, run 
+
+    $ python manage.py runserver
+    
+### Other notes
+
+To create a new Admin user, use
+
+    $ python manage.py createsuperuser
+
+You can run the included tests with
+
+    $ python manage.py test
+
+# Support & Documentation
+
+The documentation for the API endpoints for this project can be found at https://fact-guesser-ronjak77.c9users.io/docs/
+
+An CoreAPI Schema can be found at https://fact-guesser-ronjak77.c9users.io/schema/
+
+A live version of the API is located at https://fact-guesser-ronjak77.c9users.io/ 
+
+For troubleshooting purposes, you can find a list of installed Python packages included as a text file in the repository ("installed packages.txt"). 
 
 Django docs can be found at https://www.djangoproject.com/
 
 You may also want to follow the Django tutorial to create your first application:
 https://docs.djangoproject.com/en/1.9/intro/tutorial01/
-
-Visit http://docs.c9.io for support, or to learn more about using Cloud9 IDE.
-To watch some training videos, visit http://www.youtube.com/user/c9ide

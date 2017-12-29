@@ -25,20 +25,28 @@ from factguesser.permissions import IsOwnerOrReadOnly, IsSameUserOrReadOnly, All
 @permission_classes((permissions.AllowAny, ))
 def api_root(request, format=None):
     """
-    An API for creating Propositions and Answers related to them.
+    Returns a listing of the available endpoints of this Factguesser API.
+    
+    'Users', 'propositions' and 'answers' are related to the functionality of the API, and you can access data through them.
+    
+    'Schema' and 'documentation' are there to provide you more information about the API and make it easier to use it. 
     """
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'propositions': reverse('proposition-list', request=request, format=format),
         'answers': reverse('answer-list', request=request, format=format),
         'schema': reverse('schema', request=request, format=format),
-        'docs': reverse('api-docs:docs-index', request=request, format=format),
+        'documentation': reverse('api-docs:docs-index', request=request, format=format),
     })
     
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows answers to be created and viewed.
+    retrieve: Return the given answer.
+    
+    list: Return a list of all the answers.
+    
+    create: Create a new Answer. This requires the URL of the related Proposition.
     """
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
@@ -46,7 +54,18 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
 class UserViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be created, viewed, updated, edited or deleted.
+    list: List all users.
+    
+    create: Create a new User. A new User will not have admin privileges but can add Propositions to the system.
+    
+    read: Return info of a single User.
+    
+    update: Update the info of an User. Requires you to be logged in as that user.
+    
+    partial_update: Update some of the info of an User. Requires you to be logged in as that user.
+    
+    delete: Delete an user. Requires you to be logged in as that user or to be an Admin user.
+    
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
@@ -54,7 +73,20 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class PropositionViewSet(viewsets.ModelViewSet):
     """
-     API endpoint that allows Propositions to be created, viewed or edited.
+    list: Lists all the Propositions.
+    
+    create: Creates a new Proposition. This requires you to be a logged in User.
+    
+    read: Shows the details of a single Proposition. 
+    
+    update: Allows editing of a Proposition. You have to be the Proposition's owner or an Admin to be allowed to update it.
+    
+    partial_update: Allows editing of a Proposition. You have to be the Proposition's owner or an Admin to be allowed to update it.
+    
+    delete: Allows the owner of the Proposition or an Admin to delete it.
+    
+    perform_create: Internal function that couldn't be hidden from the documentation. It cannot be accessed through the API by users.
+    
     """
     queryset = Proposition.objects.all()
     serializer_class = PropositionSerializer
