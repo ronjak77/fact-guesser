@@ -65,14 +65,14 @@ class APITestCase(APITestCase):
     
     def test_proposition(self):
         """
-        Ensure we can list proposition objects.
+        Ensure we can get a single proposition object.
         """
         response = self.client.get('/propositions/1/')
         self.assertEqual(response.data, {'id': 1, 'owner': 'testApiUser', 'title': 'Cats bark', 'truthvalue': False, 'url': 'http://testserver/propositions/1/', 'answers': []})
         
     def test_add_proposition(self):
         """
-        Add a proposition
+        Test that we can add a proposition
         """
         response = self.client.post('/propositions/', {'title': 'Moon is square'}, format='json')
         assert response.data['title'] == 'Moon is square'
@@ -83,7 +83,7 @@ class APITestCase(APITestCase):
     
     def test_add_answer(self):
         """
-        Add an answer
+        Tests that we can add an answer
         """
         response = self.client.post('/answers/', {'answer': False, 'proposition': 'http://testserver/propositions/1/'}, format='json')
         # Assert 201 Created as status
@@ -104,7 +104,7 @@ class APITestCase(APITestCase):
     
     def test_add_user_unauthenticated(self):
         """
-        Unauthenticated user can add new Users.
+        Test that an unauthenticated user can add new Users.
         """
         self.client.force_authenticate(user=None, token=None)
         response = self.client.post('/users/', {'username': 'Tahvo', 'password': 'test'}, format='json')
@@ -118,7 +118,7 @@ class APITestCase(APITestCase):
         
     def test_add_user_authenticated(self):
         """
-        Authenticated user can add new Users.
+        Test that an authenticated user can add new Users.
         """
         self.client.force_authenticate(user=self.user)
         response = self.client.post('/users/', {'username': 'Kaaleppi', 'password': 'test'}, format='json')
@@ -132,7 +132,7 @@ class APITestCase(APITestCase):
     
     def test_everyone_can_access_schema(self):
         """
-        The schema is publicly available.
+        Test that the schema is publicly available.
         """
         self.client.force_authenticate(user=None, token=None)
         response = self.client.get('/schema/')
@@ -140,7 +140,7 @@ class APITestCase(APITestCase):
     
     def test_everyone_can_access_api_root(self):
         """
-        Accessing API root will return a list of endpoints.
+        Test that accessing API root will return a list of endpoints.
         """
         self.client.force_authenticate(user=None, token=None)
         response = self.client.get('/')
